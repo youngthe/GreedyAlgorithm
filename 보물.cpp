@@ -1,47 +1,49 @@
+//처음에 접근 방식이 정렬된 arrA를 통해서 arrB에서 최대값 x를 찾으면 그 값의 주소 i 와 첫번째 값과 변경시키려고 했음
+// arrA[0] <-> arrA[i], arrA[1] <-> arrA[i] ...
+// 이러면 변경시켰던 값과 충동이 남 -> 충돌이 나는것을 해결하기 위해서 변경했을때의 값을 체크해서 체크 된 값을 변경시키지 않는 등
+// 다양한 시도를 했던 결과 실패했다. 
+// 좋은 생각이 없을까 고민하다가 정렬된 arrA의 값을 가지고 arrB의 최대값과 최대값의 해당하는 주소만 찾고
+// result_arrA의 값을 새로 만들어서 최대값에 해당하는 주소에 arrA의 값을 넣었더니 해결이 되었다.
+// 그리고 checkarr을 통해서 그 다음 최대값을 구하는 로직을 구현했다 
+// 그리고 typedef 사용에서 에러가 났었음. 
+
 #include<iostream>
 
 using namespace std;
 
-typedef struct _Arr{
-	int value;
-	int area;
-} Arr;
-
-//bool compare(int a, int b){
-//	return a < b;
-//}
-int change(int a, int b);
 int main(){
 	
-	int n, i, j, min=100;
-	int temp;
-	Arr arr_A_Min;
-	Arr arr_B_Max;
-	cin >> n;
+	int n=0, i=0, j=0;
+	int x=0;
+	int temp=0; //정렬 
+	int Max;
+	int MaxIndex=0;
+	int result = 0; // 각 배열의 곱의 S 연산 결과 
+	cin >> n; // 입력할 수 입력 
 	
-	int arrA[n];
-	int arrB[n];
-	int checkarr[n] = {0,};
-	int count=0;
+	if(n == 0){
+		cout << 0;
+		return 0;
+	}
+	int arrA[50] = {0,};
+	int arrB[50] = {0,};
+	int checkarr[50] = {0,};
+	int resultarrA[50] ={0,};
 	
 	for(i=0;i<n;i++){
-		cin >> arrA[i];;
+		cin >> arrA[i];
 	}
 	
 	for(i=0;i<n;i++){
 		cin >> arrB[i];
 	}
 	
-	arr_B_Max.area = 0;
-	arr_A_Min.value = 100;
-	
-	
 	//arrA 오름차순 정렬
 	for(i=0;i<n;i++)
 	{
 		for(j=i+1;j<n;j++)
 		{
-			if(change(arrA[i], arrA[j])){
+			if(arrA[i] > arrA[j]){
 				temp=arrA[i];
 				arrA[i] = arrA[j];
 				arrA[j] = temp;
@@ -49,56 +51,27 @@ int main(){
 		}
 	}
 	
-	
-	
-	for(int x=0;x<n;x++){
+	for(x=0;x<n;x++){
 		
-		arr_B_Max.value = 0;
+		Max=0;
 		for(i=0;i<n;i++){
 			
-			if(arr_B_Max.value<arrB[i] & checkarr[i]==0)
+			if(Max<arrB[i] & checkarr[i]==0)
 			{
-				cout << "arr_B_Max.value : " << arr_B_Max.value << " arr_B_Max.area : " << arr_B_Max.area<< endl;
-				cout << "arrB[i] : " << arrB[i] << endl;
-				arr_B_Max.value = arrB[i];
-				arr_B_Max.area = i; 
-				cout << "최대값 : "<< arr_B_Max.value << endl;
+				Max = arrB[i];
+				MaxIndex = i;
 			}
 			
 		}
-		//arrA[x] 값이랑 arrA[arr_B_MAX.area] 값이랑 바꿔야함 
-		temp = arrA[x];
-		arrA[x] = arrA[arr_B_Max.area];
-		arrA[arr_B_Max.area] = temp;
-		checkarr[arr_B_Max.area] = 1;
-		cout << "change : " << arrA[x] << ", " << arrA[arr_B_Max.area] << endl;
-		for(i=0;i<n;i++)
-			cout << arrA[i] << ' ';
 		
+		checkarr[MaxIndex] = 1;
+		result += Max*arrA[x];
 	}
 	
-	for(i=0;i<n;i++)
-	{
-		cout << arrA[i] << ' ';
-		
-	}
-	cout << endl;
-	for(i=0;i<n;i++)
-	{
-		cout << arrB[i] << ' ';
-		
-	}
-	
+	cout << result;
+	return 0;
 }
 
 
 
-int change(int a, int b)
-{
-	if(a > b)
-	{
-		return true;
-	}
-	else
-		return false;
-}
+
