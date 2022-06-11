@@ -1,22 +1,40 @@
 #include<iostream>
+#include<algorithm>
 using namespace std;
 
 
 int main(){
-	int rope_count;
+	ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+	int ropecount;
 	
-	cin >> rope_count;  
+	cin >> ropecount;
 	
-	int rope_weight[n];
-	int rope_weight_sum = 0; 
-	int result;
+	int ropeweight[100001] = {0,};
+	int i, j;
+	long long  result;
+	long long  sum;
 	
-	for (int i=0;i<n;i++)
+	for (i=0;i<ropecount;i++)
 	{
-		cin >> rope_weight[i];
-		rope_weight_sum += rope_weight[i];
+		cin >> ropeweight[i];
+	}
+	if(ropecount == 1){
+		cout << ropeweight[0] << endl;
+		return 0;
+	}
+	//로프 무 게 내림차순 정렬 
+	sort(ropeweight, ropeweight+ropecount, greater<int>());
+	result = ropeweight[0];
+	for(i=0;i<ropecount;i++)
+	{
+		sum=ropeweight[i]*(i+1);
+		if(sum > result){
+			result = sum;
+		}
 	}
 	
-	
-	
+	cout << result;
+	return 0;
 }
